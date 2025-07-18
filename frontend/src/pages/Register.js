@@ -1,9 +1,9 @@
 // src/pages/Register.js
 
 import React, { useState } from 'react';
-import TextInput from '../components/TextInput';
-import Button from '../components/Button';
-import Container from '../components/Container';
+import TextInput from '../../frontend/src/components/TextInput';
+import Button from '../../frontend/src/components/Button';
+import Container from '../../frontend/src/components/Container';
 
 function Register() {
   const [name, setName] = useState('');
