@@ -1,9 +1,9 @@
 // src/pages/Login.js
 
 import React, { useState } from 'react';
-import TextInput from '../../frontend/src/components/TextInput';
-import Button from '../../frontend/src/components/Button';
-import Container from '../../frontend/src/components/Container';
+import TextInput from '../components/TextInput';
+import Button from '../components/Button';
+import Container from '../components/Container';
 
 function Login() {
   const [email, setEmail] = useState('');
