@@ -1,6 +1,8 @@
+// prisma/schema.prisma
+
 datasource db {
   provider = "sqlite"
-  url      = "file:./dev.db"
+  url      = "file:./dev.db"  // Esto crea un archivo SQLite en tu proyecto
 }
 
 generator client {
@@ -12,5 +14,4 @@ model User {
   name      String
   email     String   @unique
   password  String
-  createdAt DateTime @default(now())
 }
