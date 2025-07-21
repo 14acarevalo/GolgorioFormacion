@@ -1,76 +1,49 @@
-// src/pages/Login.js
-
 import React, { useState } from 'react';
-import TextInput from '../components/TextInput';
-import Button from '../components/Button';
-import Container from '../components/Container';
 
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
 
-  function validateEmail(email) {
-    console.log('[Validación] Comprobando formato de email:', email);
-    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-    return regex.test(email);
-  }
-
-  function validatePassword(password) {
-    console.log('[Validación] Comprobando contraseña...');
-    if (password.length < 5) return false;
-    if (!/\d/.test(password)) return false;
-    if (!/[A-Z]/.test(password)) return false;
-    if (/^\s+$/.test(password)) return false;
-    return true;
-  }
-
-  function handleLogin(e) {
+  async function handleLogin(e) {
     e.preventDefault();
-    console.log('[Login] Iniciando proceso de login...');
 
-    if (!validateEmail(email)) {
-      setMessage('Por favor, introduce un email válido.');
-      return;
+    const res = await fetch('http://localhost:3001/api/users/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password })
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      localStorage.setItem('user', JSON.stringify(data));
+      window.location.href = '/home';
+    } else {
+      setMessage(data.error || 'Error al iniciar sesión');
     }
-
-    if (!validatePassword(password)) {
-      setMessage('Contraseña inválida. Debe tener más de 5 caracteres, incluir números y una letra mayúscula.');
-      return;
-    }
-
-    console.log('[Login] ✅ Credenciales correctas');
-    setMessage('✅ ¡Inicio de sesión exitoso!');
   }
 
   return (
-    <Container title="Iniciar Sesión">
+    <div style={{ padding: '2rem' }}>
+      <h2>Iniciar Sesión</h2>
       <form onSubmit={handleLogin}>
-        <TextInput
-          label="Correo electrónico"
+        <input
           type="email"
+          placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="tu@email.com"
         />
-
-        <TextInput
-          label="Contraseña"
+        <input
           type="password"
+          placeholder="Contraseña"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          placeholder="Mínimo 5 caracteres"
         />
-
-        <Button text="Iniciar Sesión" type="submit" />
-
-        {message && (
-          <p style={{ color: message.includes('exitoso') ? 'green' : 'red', marginTop: '1rem' }}>
-            {message}
-          </p>
-        )}
+        <button type="submit">Iniciar Sesión</button>
+        {message && <p style={{ color: 'red' }}>{message}</p>}
       </form>
-    </Container>
+    </div>
   );
 }
 
